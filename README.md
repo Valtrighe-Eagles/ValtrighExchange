@@ -2,7 +2,7 @@
 
 ## Funzionamento
 ValtrighExchange è un applicativo che permette di simulare il funzionamento di una borsa valori grazie a dei thread, che comprando o vendendo le azioni influenzano la valutazione della criptovaluta.
-Sebbene sarebbe stato interessante simulare in modo più realistico possibile le fluttuazioni di valore ma è pressochè impossibile replicare gli eventi esterni anche più rilevanti all'interno del programma, quindi queste si baseranno solo e soltanto sugli scambi.
+Sarebbe stato interessante simulare in modo più realistico possibile le fluttuazioni di valore ma è pressochè impossibile replicare gli eventi esterni anche più rilevanti all'interno del programma, quindi queste si baseranno solo e soltanto sugli scambi.
 
 ## Criptovaluta
 La criptovaluta (ValtrigheCoin) è generata dal programma e successivamente i thread faranno richieste, questa viene aggiornata ogni secondo e genera un grafico sull'andamento.
