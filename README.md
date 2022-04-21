@@ -1,4 +1,4 @@
-# ValtrighExchange
+**ValtrighExchange**
 
 ## Funzionamento
 ValtrighExchange è un applicativo che permette di simulare il funzionamento di una borsa valori grazie a dei thread, che comprando o vendendo le azioni influenzano la valutazione della criptovaluta.
