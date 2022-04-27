@@ -1,12 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ValtrighExchange
@@ -16,19 +9,21 @@ namespace ValtrighExchange
         private Form2 Home;
         private int ID_N;
         private string csvFile;
+        private string ID;
         public Form1()
         {
             InitializeComponent();
-            csvFile = "Utenti.csv";
-            ID_N = File.ReadAllLines(csvFile).Length;
+            csvFile = "Utenti.csv"; // nome del file
+            ID = "";
+            ID_N = File.ReadAllLines(csvFile).Length; // vede quante righe ha il file
         }
+
         // Effettua accesso
         private void Accedi_Click(object sender, EventArgs e)
         {
             string Username = Username1.Text;
             string Password = Password1.Text;
-            string nome = "", cognome = "";
-            bool checkutente = false;
+            string nome = "", cognome = "",ident="";
             bool continua = false;
 
             foreach (var line in File.ReadLines(csvFile))
@@ -37,7 +32,6 @@ namespace ValtrighExchange
                 string username = line.Substring(0, line.IndexOf(";"));
                 if (username == Username)
                 {
-                    checkutente = true;
                     // Controlla che la password sia corretta
                     string password = line.Substring(line.LastIndexOf(";") + 1);
                     if (password == Password)
@@ -46,9 +40,10 @@ namespace ValtrighExchange
                         int start = line.IndexOf(";") + 1;
                         int length = line.LastIndexOf(";") - line.IndexOf(";") - 1;
                         string nc = line.Substring(start, length);
-                        
+
+                        ident = username;
                         nome = nc.Substring(0, nc.IndexOf(";"));
-                        cognome = nc.Substring(nc.IndexOf(";")+1);
+                        cognome = nc.Substring(nc.IndexOf(";") + 1);
                     }
                     else
                     {
@@ -59,22 +54,27 @@ namespace ValtrighExchange
                 }
             }
             // Se le credenziali corrispondono porta alla home
-            if (checkutente == false)
+            if (continua == true)
             {
-                MessageBox.Show("Utente non trovato");
-            }
-            else if (continua == true)
-            {
-                Home = new Form2(nome, cognome);
+                Home = new Form2(ident, nome, cognome);
                 Home.Show();
                 this.Hide();
+                
+            }
+            else
+            {
+                MessageBox.Show("Utente non trovato");
+                Username1.Text = "";
+                Password1.Text = "";
             }
         }
 
         // Mostra la finestra per registrarsi
         private void Registrati1_Click(object sender, EventArgs e)
         {
-            panel1.Visible = true;
+            panel1.Visible = true;            
+            Username1.Text = "";
+            Password1.Text = "";
         }
 
         // Nasconde la finestra per registrarsi
@@ -85,27 +85,31 @@ namespace ValtrighExchange
             Cognome.Text = "";
             Password.Text = "";
             Checkpsw.Text = "";
-            Username1.Text = "";
-            Password1.Text = "";
         }
 
         // Registra un nuovo utente
         private void Registrati_Click(object sender, EventArgs e)
         {
-            ID_N++;
             if (Password.Text == Checkpsw.Text)
             {
-         
-                string linea = Convert.ToString(ID_N).PadLeft(4, '0') + ';' + Nome.Text + ';' + Cognome.Text + ';' + Password.Text + '\n';
+                ID_N++;
+                ID = Convert.ToString(ID_N).PadLeft(4, '0');
+                string linea = ID + ';' + Nome.Text + ';' + Cognome.Text + ';' + Password.Text + '\n';
                 File.AppendAllText(csvFile, linea);
+                MessageBox.Show("Registrazione avvenuta con successo\nIl tuo ID è: " + ID);
+                panel1.Visible = false;
+                Username1.Text = ID;
+                Password1.Text = Password.Text;
             }
             else
             {
-                MessageBox.Show("Le due password non coincidono");
-                Checkpsw.Clear();
-                Password.Clear();
-            }
-            panel1.Visible = false;
+                while (Password.Text != Checkpsw.Text)
+                {
+                    MessageBox.Show("Le due password non coincidono");
+                    Checkpsw.Clear();
+                    Password.Clear();
+                }
+            }            
         }
     }
 }
